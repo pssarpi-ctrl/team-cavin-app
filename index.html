@@ -123,9 +123,10 @@
     h1.headline {
       font-family: var(--font-display);
       font-weight: 800;
-      font-size: 38px;
-      line-height: 1.05;
+      font-size: 30px;
+      line-height: 1.04;
       letter-spacing: -0.02em;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85);
     }
     h1.headline .neon { color: var(--neon); }
     h2.title {
@@ -191,14 +192,19 @@
 
     /* ---------- TELA 1 ---------- */
     .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 25% top; opacity: 0.62; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% top; opacity: 0.92; }
     .hero-bg .fade {
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.30) 0%, rgba(10,10,10,0.78) 60%, var(--graphite) 100%);
+      background: linear-gradient(to bottom,
+        rgba(10,10,10,0.05) 0%,
+        rgba(10,10,10,0.10) 30%,
+        rgba(10,10,10,0.55) 52%,
+        rgba(10,10,10,0.92) 70%,
+        var(--graphite) 100%);
     }
-    .hero-content { position: relative; z-index: 10; display: flex; flex-direction: column; flex: 1; padding: 32px 24px 24px; }
+    .hero-content { position: relative; z-index: 10; display: flex; flex-direction: column; flex: 1; padding: 24px 24px 24px; }
     .hero-bottom { margin-top: auto; }
-    .motiv-wrap { margin-top: 16px; min-height: 48px; display: flex; align-items: flex-start; }
+    .motiv-wrap { margin-top: 10px; min-height: 40px; display: flex; align-items: flex-start; }
     .motiv {
       color: rgba(255, 255, 255, 0.7);
       font-size: 14px;
@@ -208,7 +214,7 @@
       transition: opacity 0.6s ease;
     }
 
-    .offer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .offer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
     .offer-card {
       border-radius: 16px; padding: 14px; text-align: left; width: 100%;
       display: flex; flex-direction: column;
@@ -392,7 +398,7 @@
           </div>
 
           <div class="hero-bottom">
-            <h1 class="headline">TREINE COM<br /><span class="neon">PROPÓSITO.</span><br />EVOLUA DE<br />VERDADE.</h1>
+            <h1 class="headline">TREINE COM <span class="neon">PROPÓSITO.</span><br />EVOLUA DE VERDADE.</h1>
 
             <div class="motiv-wrap">
               <p id="motivPhrase" class="motiv">O seu melhor resultado começa na sua decisão de hoje.</p>
