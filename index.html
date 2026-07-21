@@ -191,10 +191,10 @@
 
     /* ---------- TELA 1 ---------- */
     .hero-bg { position: absolute; inset: 0; z-index: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0.40; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 25% top; opacity: 0.62; }
     .hero-bg .fade {
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.85) 55%, var(--graphite) 100%);
+      background: linear-gradient(to bottom, rgba(10,10,10,0.30) 0%, rgba(10,10,10,0.78) 60%, var(--graphite) 100%);
     }
     .hero-content { position: relative; z-index: 10; display: flex; flex-direction: column; flex: 1; padding: 32px 24px 24px; }
     .hero-bottom { margin-top: auto; }
@@ -209,10 +209,72 @@
     }
 
     .offer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-    .offer-card { border-radius: 16px; padding: 14px; }
+    .offer-card {
+      border-radius: 16px; padding: 14px; text-align: left; width: 100%;
+      display: flex; flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .offer-card:hover { border-color: var(--neon); box-shadow: var(--shadow-neon-sm); }
+    .offer-card:active { transform: scale(0.96); }
     .offer-card .oc-icon { color: var(--neon); margin-bottom: 8px; }
     .offer-card .oc-title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
     .offer-card .oc-desc { font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.35; margin-top: 4px; }
+    .offer-card .oc-more {
+      margin-top: 10px; font-size: 11px; font-weight: 700; color: var(--neon);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .offer-card .oc-more svg { width: 13px; height: 13px; }
+
+    /* ---------- modal ---------- */
+    .modal-overlay {
+      position: absolute; inset: 0; z-index: 50;
+      display: none; align-items: flex-end; justify-content: center;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .modal {
+      position: relative;
+      width: 100%; max-width: 400px;
+      background: var(--graphite-2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 8px;
+      max-height: 90%; overflow-y: auto;
+      animation: slideUp 0.35s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--graphite-3); color: rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-right: 32px; }
+    .modal-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: rgba(163, 230, 53, 0.15); color: var(--neon);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .modal h3 { font-family: var(--font-display); font-weight: 800; font-size: 20px; line-height: 1.1; }
+    .modal-sub { color: var(--txt-dim); font-size: 13px; line-height: 1.4; margin-bottom: 16px; }
+    .modal-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .modal-list li { display: flex; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.4; }
+    .modal-list li svg { width: 18px; height: 18px; color: var(--neon); flex-shrink: 0; margin-top: 1px; }
+    .price-tag {
+      background: rgba(163, 230, 53, 0.10);
+      border: 1px solid rgba(163, 230, 53, 0.3);
+      border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px;
+    }
+    .price-tag .plabel { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--txt-dim); }
+    .price-tag .pvalue { font-family: var(--font-display); font-weight: 800; font-size: 34px; color: var(--neon); line-height: 1.1; margin-top: 2px; }
+    .price-tag .pvalue span { font-size: 15px; color: #fff; font-weight: 600; }
 
     .cta-note { text-align: center; font-size: 11px; color: var(--txt-dim-2); margin-top: 12px; }
 
@@ -337,18 +399,24 @@
             </div>
 
             <div class="offer-grid">
-              <div class="offer-card glass">
+              <button class="offer-card glass" onclick="openModal('modal-personal')">
                 <!-- icon: user-check -->
                 <svg class="icon oc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
                 <p class="oc-title">Personal Trainer</p>
                 <p class="oc-desc">Treinos presenciais e acompanhamento de perto.</p>
-              </div>
-              <div class="offer-card glass">
+                <span class="oc-more">Saiba mais
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </button>
+              <button class="offer-card glass" onclick="openModal('modal-consultoria')">
                 <!-- icon: smartphone -->
                 <svg class="icon oc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
                 <p class="oc-title">Consultoria Online</p>
                 <p class="oc-desc">Treine de onde quiser, com app e suporte diário.</p>
-              </div>
+                <span class="oc-more">Saiba mais
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </button>
             </div>
 
             <button class="btn-primary pulse-glow mt-6" onclick="goTo(2)">
@@ -547,6 +615,124 @@
         </button>
       </section>
 
+      <!-- ============================= TELA CONSULTORIA — SUB-OPÇÕES ============================= -->
+      <section id="screen-consultoria" class="screen pad">
+        <button class="back-btn" onclick="goTo(3)">
+          <svg class="icon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Voltar
+        </button>
+
+        <span class="step-label">CONSULTORIA ONLINE</span>
+        <h2 class="title sm mt-1">Como você prefere<br/>seguir agora?</h2>
+        <p class="muted mt-2">Escolha a melhor opção para você.</p>
+
+        <div class="options">
+          <button class="option-card" onclick="consultoriaDuvidas()">
+            <div class="oc-badge sm">
+              <!-- icon: message-circle -->
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </div>
+            <div class="oc-body">
+              <p class="oc-h">Tenho dúvidas</p>
+              <p class="oc-p">Quero falar com o Thallys antes de decidir.</p>
+            </div>
+            <svg class="icon oc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+
+          <button class="option-card" onclick="consultoriaInscricao()">
+            <div class="oc-badge sm">
+              <!-- icon: rocket -->
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+            </div>
+            <div class="oc-body">
+              <p class="oc-h">Quero fazer minha inscrição</p>
+              <p class="oc-p">Já quero começar agora mesmo!</p>
+            </div>
+            <svg class="icon oc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================= MODAL: PERSONAL TRAINER ============================= -->
+      <div class="modal-overlay" id="modal-personal" onclick="overlayClose(event, 'modal-personal')">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('modal-personal')">
+            <svg class="icon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+          <div class="modal-head">
+            <div class="modal-icon">
+              <svg class="icon lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/></svg>
+            </div>
+            <h3>Personal Trainer<br/>Presencial</h3>
+          </div>
+          <p class="modal-sub">Acompanhamento de perto, ao seu lado, para acelerar seus resultados na região de Rio das Ostras.</p>
+          <ul class="modal-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Treinos presenciais com correção de execução em tempo real.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Planejamento montado sob medida para o seu objetivo.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Motivação e cobrança para manter a constância.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Ajuste da intensidade a cada treino, na hora.
+            </li>
+          </ul>
+          <button class="btn-primary" onclick="modalInteresse()">
+            TENHO INTERESSE
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================= MODAL: CONSULTORIA ONLINE ============================= -->
+      <div class="modal-overlay" id="modal-consultoria" onclick="overlayClose(event, 'modal-consultoria')">
+        <div class="modal">
+          <button class="modal-close" onclick="closeModal('modal-consultoria')">
+            <svg class="icon sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+          <div class="modal-head">
+            <div class="modal-icon">
+              <svg class="icon lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            </div>
+            <h3>Consultoria<br/>Online</h3>
+          </div>
+          <p class="modal-sub">Treine de onde quiser, com aplicativo próprio e suporte diário do Thallys — resultados reais de qualquer lugar.</p>
+          <ul class="modal-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Treino personalizado no app, com vídeo de cada exercício.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Dieta e ajustes contínuos conforme a sua evolução.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Suporte direto com o Thallys via WhatsApp.
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Flexível: treine no seu horário, onde estiver.
+            </li>
+          </ul>
+          <div class="price-tag">
+            <div class="plabel">Investimento</div>
+            <div class="pvalue">R$ 250<span>/mês</span></div>
+          </div>
+          <button class="btn-primary" onclick="modalInteresse()">
+            TENHO INTERESSE
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -626,13 +812,19 @@
       dados.objetivo = objetivo;
       const outraCidade = dados.cidadeTipo === 'Outra Cidade';
 
+      // Consultoria Online -> sempre mostra as sub-opções (dúvidas x inscrição)
+      if (objetivo === 'Consultoria Online') {
+        showScreen('screen-consultoria');
+        return;
+      }
+
       if (outraCidade) {
         if (objetivo === 'Personal Trainer Presencial') {
           mostrarFeedback(
             'Presencial indisponível na sua região 😔',
             'Mas temos uma excelente notícia! Você pode ter os mesmos resultados com a nossa Consultoria Online de qualquer lugar do mundo!',
             'Quero conhecer a Consultoria',
-            () => { dados.objetivo = 'Consultoria Online (veio do presencial)'; enviarWhatsApp(); }
+            () => { dados.objetivo = 'Consultoria Online'; showScreen('screen-consultoria'); }
           );
         } else {
           enviarWhatsApp();
@@ -644,6 +836,29 @@
           enviarWhatsApp();
         }
       }
+    }
+
+    // ---------- Sub-opções da Consultoria Online ----------
+    function consultoriaDuvidas() {
+      dados.objetivo = 'Consultoria Online (tem dúvidas / quer falar com o Thallys)';
+      enviarWhatsApp();
+    }
+    function consultoriaInscricao() {
+      dados.objetivo = 'Consultoria Online (inscrição)';
+      // Link oficial de inscrição da consultoria
+      window.open('https://go.primecoaching.com.br/c/Vdq2EoKz9g', '_blank');
+    }
+
+    // ---------- Modais da tela inicial ----------
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function overlayClose(event, id) {
+      if (event.target === event.currentTarget) closeModal(id);
+    }
+    function modalInteresse() {
+      closeModal('modal-personal');
+      closeModal('modal-consultoria');
+      goTo(2);
     }
 
     function escolherHistorico(historico) {
